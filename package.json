@@ -1,0 +1,16 @@
+{
+  "name": "quorra",
+  "version": "0.0.1",
+  "description": "The module that will hopefully run the front-end of Tron.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Alcha <alcha@paranoiddevs.com> (https://paranoiddevs.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "multer": "^1.3.0"
+  }
+}
