@@ -1,35 +1,34 @@
 const express = require('express')
-const multer = require('multer')
-const path = require('path')
 const app = express()
+const port = process.env.PORT || 8080
+const mongoose = require('mongoose')
+const passport = require('passport')
+const flash = require('connect-flash')
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  }
-})
+const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const session = require('express-session')
 
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (file.originalname.match(/(\.png$|\.gif$|\.jpg$)/) === null) cb(null, false)
-    else if (req.headers['content-length'] > 8000000) cb(null, false)
-    else cb(null, true)
-  }
-})
+const configdb = require('./config/database')
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
-})
+mongoose.connect(configdb.url)
 
-app.post('/', upload.array('fileUpload'), (req, res) => {
-  if (req.files === undefined) console.log(`File(s) was/were not uploaded.`)
-  res.redirect('/')
-})
+require('./config/passport')(passport)
 
-app.listen(3000, () => {
-  console.log(`Listening on port 3000...`)
-})
+// Setup express
+app.use(morgan('dev'))
+app.use(cookieParser())
+app.use(bodyParser())
+
+app.set('view engine', 'ejs')
+
+app.use(session({ secret: 'testingthisthingout' }))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
+
+require('./app/routes')(app, passport)
+
+app.listen(port)
+console.log(`Magic happens on port ${port}`)
