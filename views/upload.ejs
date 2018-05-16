@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Quorra</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+      body {
+        padding-top: 80px;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="page-header text-center">
+        <h1><span class="fa fa-upload"></span> <a href="/upload" style="text-decoration: none">Upload</a> Your Images</h1>
+        <a href="/profile" class="btn btn-default btn-sm">Profile</a>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+      </div>
+
+      <% if (message.length > 0 && !message.startsWith("F")) {%>
+        <div class="alert alert-success"><%= message %></div>
+      <% } else if (message.length > 0 && message.startsWith("F")) {%>
+        <div class="alert alert-danger"><%= message %></div>
+      <% } %>
+
+      <div class="row center">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <form action="/upload" enctype="multipart/form-data" method="POST">
+            <div class="form-group">
+              <label>Current Commands (pick one to add the image(s) to):</label>
+              <select name="folder" class="form-control" required>
+                <% for (let x=0; x < paths.length; x++) { %>
+                  <option value="<%= paths[x] %>" /><%= paths[x] %></option>
+                <% } %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Image(s)</label>
+              <input type="file" multiple class="form-control" name="fileUpload" required />
+            </div>
+      
+            <button type="submit" class="btn btn-warning btn-lg">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
